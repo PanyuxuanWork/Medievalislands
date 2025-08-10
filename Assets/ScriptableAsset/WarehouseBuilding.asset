@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5386b99dcb4765b469e614602aea98f3, type: 3}
+  m_Name: WarehouseBuilding
+  m_EditorClassIdentifier: 
+  ID: 0
+  Name: 
+  BuildingType: 0
+  BuildingSubType: 0
+  ProfessionTypes: 
+  Footprint: {x: 1, y: 1}
+  MaxEmployees: 5
+  AllowAutoAssign: 1
+  BuildCosts:
+  - Type: 0
+    Amount: 10
+  BuildPrefab: {fileID: 4588264492309281378, guid: 96dc2b91394637a4eba679b0939ae458,
+    type: 3}
+  PreviewPrefab: {fileID: 5817511417008059398, guid: d70aca38fdfdbb04f9c74c540000d705,
+    type: 3}
+  Icon: {fileID: 0}
+  Description: 
