@@ -15,78 +15,56 @@ public class ProductionBuilding : BuildingBase, IProducer, IConsumer
     public RecipeDef recipe;
 
     [Header("Inventories")]
-    public Inventory inputInv = new Inventory();   // 投料仓
-    public Inventory outputInv = new Inventory();  // 成品仓
+    public Inventory inputInv = new Inventory();
+    public Inventory outputInv = new Inventory();
 
     [Header("Timing")]
-    [Tooltip("一个生产周期的实际秒数；若未设置则从 recipe.cycleSeconds 读取")]
     public float cycleSecondsOverride = 0f;
 
-    private float _accSeconds = 0f;  // 实时累计（秒）
-    private float _cycleSeconds = 5f;
+    [Header("Control")]
+    [Tooltip("暂停生产（UI 切换）")]
+    public bool Paused = false;
 
-    // 可选：如果你以后要按“需求工人数量”影响效率，可以在这里读 recipe.workersRequired
-    // 并结合绑定工人数来决定是否生产或放慢生产。
+    private float _accSeconds = 0f;
+    private float _cycleSeconds = 5f;
 
     protected override void Start()
     {
         base.Start();
-
-        // 初始化生产周期
-        if (recipe != null && recipe.cycleSeconds > 0f)
-        {
-            _cycleSeconds = recipe.cycleSeconds;
-        }
-        if (cycleSecondsOverride > 0f)
-        {
-            _cycleSeconds = cycleSecondsOverride;
-        }
+        if (recipe != null && recipe.cycleSeconds > 0f) _cycleSeconds = recipe.cycleSeconds;
+        if (cycleSecondsOverride > 0f) _cycleSeconds = cycleSecondsOverride;
     }
 
-    private void OnEnable()
-    {
-        TickSystem.OnTick += OnTick;
-    }
-
-    private void OnDisable()
-    {
-        TickSystem.OnTick -= OnTick;
-    }
+    private void OnEnable() { TickSystem.OnTick += OnTick; }
+    private void OnDisable() { TickSystem.OnTick -= OnTick; }
 
     private void Update()
     {
-        // 非激活/无配方则不计时
         if (state != BuildingState.Active) return;
+        if (Paused) return;
         if (recipe == null) return;
 
-        // 实时累计到达一个周期的判断量
         _accSeconds += Time.deltaTime;
     }
 
-    // === 生产周期结算（由 TickSystem 驱动） ===
     private void OnTick()
     {
         if (state != BuildingState.Active) return;
+        if (Paused) return;
         if (recipe == null) return;
-
-        // 未达到一个周期，不生产
         if (_accSeconds < _cycleSeconds) return;
 
-        // 检查输入是否充足（逐项判断，避免使用新语法）
+        // 检查输入是否足够
         bool hasAllInputs = true;
         for (int i = 0; i < recipe.inputs.Length; i++)
         {
             ResourceType t = recipe.inputs[i].type;
             int amount = recipe.inputs[i].amount;
-            if (inputInv.Get(t) < amount)
-            {
-                hasAllInputs = false;
-                break;
-            }
+            if (inputInv.Get(t) < amount) { hasAllInputs = false; break; }
         }
         if (!hasAllInputs) return;
 
-        // 扣除输入
+        // 消耗输入
         for (int i = 0; i < recipe.inputs.Length; i++)
         {
             ResourceType t = recipe.inputs[i].type;
@@ -94,7 +72,7 @@ public class ProductionBuilding : BuildingBase, IProducer, IConsumer
             inputInv.TryConsume(t, amount);
         }
 
-        // 增加产出
+        // 产出
         for (int i = 0; i < recipe.outputs.Length; i++)
         {
             ResourceType t = recipe.outputs[i].type;
@@ -102,8 +80,14 @@ public class ProductionBuilding : BuildingBase, IProducer, IConsumer
             outputInv.Add(t, amount);
         }
 
-        // 重置周期累积
         _accSeconds = 0f;
+    }
+
+    // UI 调用
+    public void SetPaused(bool paused)
+    {
+        Paused = paused;
+        TLog.Log(this, paused ? "已暂停生产" : "已恢复生产");
     }
 
     // === IConsumer：外部投料 ===
