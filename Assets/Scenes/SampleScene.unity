@@ -412,6 +412,8 @@ Transform:
   - {fileID: 159095755}
   - {fileID: 953590899}
   - {fileID: 1046472636}
+  - {fileID: 844457197}
+  - {fileID: 939046899}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &349557280
@@ -832,6 +834,150 @@ Transform:
   m_Children: []
   m_Father: {fileID: 694586632}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &844457196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 844457197}
+  - component: {fileID: 844457200}
+  - component: {fileID: 844457199}
+  - component: {fileID: 844457198}
+  m_Layer: 0
+  m_Name: UI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &844457197
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844457196}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 349557279}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &844457198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844457196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0d9990c60025eb40b3e4739691e3b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistance: 200
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 55
+--- !u!114 &844457199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844457196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26cb8abbe4c00464ebe8965f2993a363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Visible: 1
+  ToggleKey: 283
+  WindowRect:
+    serializedVersion: 2
+    x: 390
+    y: 12
+    width: 360
+    height: 320
+  historyLength: 120
+  sampleInterval: 0.5
+--- !u!114 &844457200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844457196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcaaed983189a0a4282189ed82ef2ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Visible: 1
+  ToggleKey: 282
+  WindowRect:
+    serializedVersion: 2
+    x: 12
+    y: 12
+    width: 360
+    height: 420
+  historyLength: 120
+  sampleInterval: 0.5
+--- !u!1 &939046898
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 939046899}
+  - component: {fileID: 939046900}
+  m_Layer: 0
+  m_Name: Logistics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &939046899
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939046898}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 349557279}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &939046900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939046898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63e2ccfeccfad8a498c6f77c14d0756b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requestCooldown: 5
+  reserveTTL: 20
+  chainsPerTick: 2
+  defaultMinBatch: 3
+  minKeepPerWarehouse: 0
+  maxConcurrentPerResource: 2
 --- !u!1 &953590898
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,7 +1017,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 953590898}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f7449d292f85154ca16dc9314ad2bac, type: 3}
   m_Name: 
@@ -883,6 +1029,8 @@ MonoBehaviour:
   warehouseComponent: {fileID: 8738471866683428510}
   haulType: 0
   amount: 5
+  perUnitInterval: 0.15
+  timeBudgetSec: 20
   testProductionToWarehouse: 1
   testWarehouseToProduction: 1
 --- !u!1 &1046472635
@@ -1068,6 +1216,7 @@ GameObject:
   - component: {fileID: 1616737079}
   - component: {fileID: 1616737078}
   - component: {fileID: 1616737082}
+  - component: {fileID: 1616737083}
   m_Layer: 0
   m_Name: Bakery
   m_TagString: Untagged
@@ -1181,6 +1330,31 @@ MonoBehaviour:
   recipe: {fileID: 11400000, guid: 23f935531457793488bc9d4df828ea80, type: 2}
   cycleSecondsOverride: 2
   Paused: 0
+--- !u!114 &1616737083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616737077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f43df97dadc58d045a6f07608a073655, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  production: {fileID: 1616737082}
+  city: {fileID: 349557282}
+  taskManager: {fileID: 1046472637}
+  dispatcher: {fileID: 939046900}
+  inputTarget: 6
+  inputMinBatch: 3
+  inputCheckInterval: 1.5
+  inputCooldown: 4
+  outputBatchThreshold: 5
+  outputDispatchAmount: 5
+  outputCheckInterval: 1
+  outputCooldown: 4
+  waitIfNoWarehouse: 1
 --- !u!1 &1770431061
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@
 // ***************************************************************************/
 
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class ProductionBuilding : BuildingBase, IProducer, IConsumer
@@ -111,4 +112,27 @@ public class ProductionBuilding : BuildingBase, IProducer, IConsumer
         if (state != BuildingState.Active) return false;
         return outputInv.TryConsume(t, amount);
     }
+
+    [Button]
+    private void EnsureInputStock(ResourceType t, int want, int priority = 0)
+    {
+        if (inputInv == null) return;
+        int have = inputInv.Get(t);
+        if (have >= want) return;
+
+        LogisticsRequestDispatcher lrd = FindObjectOfType<LogisticsRequestDispatcher>();
+        if (lrd == null) { TLog.Warning("[PB] 无调度器，无法自动下单。"); return; }
+
+        LogisticsRequest req = new LogisticsRequest
+        {
+            requester = this as IConsumer,
+            type = t,
+            quantity = want - have, // 缺口
+            minBatch = Mathf.Max(1, want / 2),   // 举例：最少半批
+            priority = priority
+        };
+        lrd.Enqueue(req);
+        TLog.Log("[PB] 自动下单: " + t + " 需 " + req.quantity + " (minBatch=" + req.minBatch + ")", LogColor.Cyan);
+    }
+
 }
