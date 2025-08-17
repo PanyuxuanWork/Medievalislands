@@ -20,6 +20,7 @@ public class BuildController : MonoBehaviour
     [Header("UI")]
     public bool ShowQuickBar = true;
     public KeyCode ToggleQuickBarKey = KeyCode.Tab;
+    public KeyCode PlacerKey = KeyCode.X;
 
     private void Awake()
     {
@@ -54,6 +55,7 @@ public class BuildController : MonoBehaviour
         {
             ShowQuickBar = !ShowQuickBar;
         }
+        
     }
 
     [Button("测试：开始放置第一个")]

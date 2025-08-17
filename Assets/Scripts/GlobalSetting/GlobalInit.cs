@@ -1,25 +1,18 @@
 ﻿/***************************************************************************
-// File       : ResourceType.cs
+// File       : GlobalInit.cs
 // Author     : Panyuxuan
-// Created    : 2025/08/09
+// Created    : 2025/08/16
 // Copyright  : © 2025 SkyWander Games. All rights reserved.
-// Description: [TODO] 数据类
+// Description: [TODO] 游戏全局初始化
 // ***************************************************************************/
-
 
 using UnityEngine;
 
-public enum ResourceType
+namespace GlobalSetting
 {
-    None,
-    Wood,
-    Stone,
-    Wheat,
-    Bread,
-    IronOre,
-    Tools,
+    [RequireComponent(typeof(CoreInit))]
+    public class GlobalInit : MonoSingleton<GlobalInit>
+    {
+
+    }
 }
-
-
-
-

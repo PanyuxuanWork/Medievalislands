@@ -2,6 +2,7 @@
 // File       : Resident.cs
 // Author     : Panyuxuan
 // Created    : 2025/07/28
+// Latest     : 2025/08/16 V2.0
 // Copyright  : © 2025 SkyWander Games. All rights reserved.
 // Description: [TODO] 居民数据与执行载体：仅保留引用与背包，不再内置任务与移动循环
 // ***************************************************************************/
@@ -22,6 +23,24 @@ public class Resident : MonoBehaviour
     [ShowInInspector]
     public Inventory Inventory;              // 居民自带背包（任务在此加减资源）
 
+    [Header("职业与分类")]
+    public ProfessionType Profession = ProfessionType.None; // 具体职业
+    [ReadOnly] public ProfessionCategory ProfessionCate = ProfessionCategory.None; // 职业类别（由职业映射）
+
+    [Header("人口学")]
+    [Range(0, 120)] public int AgeYears = 20; // 年龄（年）
+    public GenderType Gender = GenderType.Unknown;
+
+    [Header("住所与单位")]
+    public BuildingBase Home;                    // 住所（仅容器）
+    public BuildingBase Workplace;               // 工作单位（可为空）
+
+    [Header("工作时间")]
+    public WorkShift WorkTime = new WorkShift();
+
+    [Header("当前任务（只读显示）")]
+    [ShowInInspector, ReadOnly] public string CurrentTaskName = ""; // 供 UI 面板显示
+
     private void Awake()
     {
         if (city == null)
@@ -32,17 +51,20 @@ public class Resident : MonoBehaviour
         {
             mover = GetComponent<ResidentMover>();
         }
-        if (Inventory == null)
-        {
-            // 需要你的 Inventory 有无参构造。若无，则改为在 Inspector 里赋值或提供 Init 方法。
-            Inventory = new Inventory();
-        }
+        Inventory ??= new Inventory();
     }
 
-    // 说明：
-    // 1) 本类不再在 Update/Invoke 中自发执行任何“伐木/面包/搬运”等例行任务；
-    // 2) 所有移动与交互由外部系统驱动：
-    //    - 寻路/移动：ResidentMover.MoveTo(...)
-    //    - 任务执行：TaskManager/ResidentAI 在 Tick 内调用
-    // 3) 资源携带统一走 Inventory（任务里 Pickup/Deliver 改为操作 Resident.Inventory）
+    // 由 ResidentAI 设置，用于 UI 展示
+    public void SetCurrentTask(ITask task)
+    {
+        if (task == null) { CurrentTaskName = string.Empty; return; }
+        CurrentTaskName = task.GetType().Name;
+    }
+
+    // 当职业变动时手动调用，刷新职业类别
+    public void RefreshProfessionCategory()
+    {
+        ProfessionCate = ProfessionCategoryUtil.Map(Profession);
+    }
+
 }

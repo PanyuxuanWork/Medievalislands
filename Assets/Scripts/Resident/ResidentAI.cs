@@ -7,15 +7,24 @@
 // ***************************************************************************/
 
 // [TODO] ResidentAI.cs
+
+using Core;
 using UnityEngine;
 
-public class ResidentAI : MonoBehaviour
+[RequireComponent(typeof(Resident))]
+[RequireComponent(typeof(ResidentMover))]
+public class ResidentAI : MonoBehaviour,ISimTickable
 {
     public Resident Owner;
     public ResidentMover Mover;
 
     private TaskContext _ctx;
     private ITask _current;
+
+    public int Order { get { return 100; } }              // 体征之后执行
+    public bool Enabled { get { return isActiveAndEnabled; } }
+
+
 
     void Start()
     {
@@ -43,4 +52,42 @@ public class ResidentAI : MonoBehaviour
             _current = null;
         }
     }
+
+    private void OnEnable()
+    {
+        if (TickRunner.Instance != null) TickRunner.Instance.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        if (TickRunner.Instance != null) TickRunner.Instance.Unregister(this);
+    }
+
+    public void SimTick()
+    {
+        // 若当前任务为空则索取一个；你已有 TaskManager 体系，这里复用
+        if (_current == null)
+        {
+            TaskManager mgr = FindObjectOfType<TaskManager>();
+            if (mgr != null)
+            {
+                _current = mgr.RequestOne();
+                if (_current != null) _current.Init(_ctx);
+            }
+            Owner.SetCurrentTask(_current);
+            return;
+        }
+
+        // 推进任务
+        if (_current.Status == TaskStatus.Running) _current.Tick();
+
+        // 任务结束→清空
+        if (_current.Status == TaskStatus.Success || _current.Status == TaskStatus.Failed || _current.Status == TaskStatus.Canceled)
+        {
+            _current = null;
+        }
+
+        Owner.SetCurrentTask(_current);
+    }
+
 }

@@ -7,8 +7,24 @@
 // ***************************************************************************/
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class ResidentSelectionServe : MonoBehaviour
+public class ResidentSelectionServe : MonoBehaviour, IPointerClickHandler
 {
+    public Resident Target;
 
+    private void Awake()
+    {
+        if (Target == null) Target = GetComponent<Resident>();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (Target == null) return;
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            // TODO：弹出你的面板并显示 Target.CurrentTaskName、Target.Stats 等
+            Debug.Log("Resident Selected: " + Target.name + ", Task=" + Target.CurrentTaskName);
+        }
+    }
 }

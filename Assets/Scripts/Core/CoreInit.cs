@@ -1,25 +1,14 @@
 ﻿/***************************************************************************
-// File       : ResourceType.cs
+// File       : CoreInit.cs
 // Author     : Panyuxuan
-// Created    : 2025/08/09
+// Created    : 2025/08/16
 // Copyright  : © 2025 SkyWander Games. All rights reserved.
-// Description: [TODO] 数据类
+// Description: [TODO] 核心功能组件初始化
 // ***************************************************************************/
-
 
 using UnityEngine;
 
-public enum ResourceType
+public class CoreInit : MonoSingleton<CoreInit>
 {
-    None,
-    Wood,
-    Stone,
-    Wheat,
-    Bread,
-    IronOre,
-    Tools,
+
 }
-
-
-
-

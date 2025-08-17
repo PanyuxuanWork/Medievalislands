@@ -9,22 +9,26 @@
 using System;
 using UnityEngine;
 
-public class TickSystem : MonoSingleton<TickSystem>
+namespace Core
 {
-    [Range(2, 20)] public int ticksPerSecond = 10; // 10Hz
-    public float TickInterval => 1f / ticksPerSecond;
-
-    public static event Action OnTick;
-
-    float _acc;
-
-    void Update()
+    public class TickSystem : MonoSingleton<TickSystem>
     {
-        _acc += Time.deltaTime;
-        while (_acc >= TickInterval)
+        [Range(2, 20)] public int ticksPerSecond = 10; // 10Hz
+        public float TickInterval => 1f / ticksPerSecond;
+
+        public static event Action OnTick;
+
+        float _acc;
+
+        void Update()
         {
-            _acc -= TickInterval;
-            OnTick?.Invoke();
+            _acc += Time.deltaTime;
+            while (_acc >= TickInterval)
+            {
+                _acc -= TickInterval;
+                OnTick?.Invoke();
+                TickRunner.Instance.TickAll();
+            }
         }
     }
 }

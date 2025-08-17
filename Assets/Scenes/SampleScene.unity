@@ -384,7 +384,6 @@ GameObject:
   - component: {fileID: 349557281}
   - component: {fileID: 349557280}
   - component: {fileID: 349557283}
-  - component: {fileID: 349557284}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -414,6 +413,7 @@ Transform:
   - {fileID: 1046472636}
   - {fileID: 844457197}
   - {fileID: 939046899}
+  - {fileID: 2102382942}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &349557280
@@ -482,25 +482,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cm: {fileID: 349557281}
---- !u!114 &349557284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349557278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e77a83e6b8f9ae4e8bf983a4f3346e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  City: {fileID: 349557282}
-  SelectedBuilding: {fileID: 11400000, guid: 59ed1ed04cad6f54abf32ac3169dcd33, type: 2}
-  OkMaterial: {fileID: 2100000, guid: a4aab903bf7faec40966e9a4057b112f, type: 2}
-  BlockMaterial: {fileID: 2100000, guid: fd5bccab6244b5d4e87f8c70c87a9ce3, type: 2}
-  RotateCWKey: 101
-  RotateCCWKey: 113
-  CancelKey: 27
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,8 +610,9 @@ GameObject:
   m_Component:
   - component: {fileID: 465804848}
   - component: {fileID: 465804849}
+  - component: {fileID: 465804850}
   m_Layer: 0
-  m_Name: Singleton
+  m_Name: GlobalInit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -664,6 +646,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Current: {fileID: 0}
+--- !u!114 &465804850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465804847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc43d387b286b1d45b7138f3bf5b6bc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &694586631
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,6 +705,7 @@ GameObject:
   - component: {fileID: 781559563}
   - component: {fileID: 781559562}
   - component: {fileID: 781559564}
+  - component: {fileID: 781559565}
   m_Layer: 0
   m_Name: BuildingPlacer
   m_TagString: Untagged
@@ -781,10 +776,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Catalog: {fileID: 11400000, guid: 462b210743c63f74bb2da24d9682eebb, type: 2}
-  Placer: {fileID: 349557284}
+  Placer: {fileID: 0}
   City: {fileID: 349557282}
   ShowQuickBar: 1
   ToggleQuickBarKey: 9
+  PlacerKey: 120
+--- !u!114 &781559565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781559560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e77a83e6b8f9ae4e8bf983a4f3346e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  City: {fileID: 349557282}
+  SelectedBuilding: {fileID: 11400000, guid: 59ed1ed04cad6f54abf32ac3169dcd33, type: 2}
+  gridSize: 1
+  defaultBuildMode: 0
+  defaultRecipe: {fileID: 11400000, guid: 256d741e8b641ad4eba260b093eef2a1, type: 2}
+  defaultInstantSeconds: 3
+  logisticsMaxWorkers: 2
+  logisticsChunkSeconds: 4
+  previewMatValid: {fileID: 0}
+  previewMatInvalid: {fileID: 0}
+  keepPlacingAfterClick: 0
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 55
+  rayMaxDistance: 2000
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1498,6 +1521,16 @@ MonoBehaviour:
   city: {fileID: 349557282}
   moveSpeed: 3
   mover: {fileID: 2070372288}
+  Profession: 0
+  ProfessionCate: 0
+  AgeYears: 20
+  Gender: 0
+  Home: {fileID: 0}
+  Workplace: {fileID: 0}
+  WorkTime:
+    StartHour: 8
+    EndHour: 17
+  CurrentTaskName: 
 --- !u!114 &2070372288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1658,6 +1691,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PathsPerTick: 8
   Diagonal: 1
+--- !u!1 &2102382941
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2102382942}
+  - component: {fileID: 2102382943}
+  m_Layer: 0
+  m_Name: TimeSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2102382942
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102382941}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 349557279}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2102382943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102382941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c96f5dfa9ff9d0646bb16a2f269d6d0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Year: 1
+  Month: 1
+  Day: 1
+  Hour: 8
+  Minute: 0
+  Second: 0
+  DayOfYear: 1
+  CurrentSeason: 0
+  Paused: 0
+  SecondsPerTickAt1x: 6
+  TimeScale: 1
+  MonthDays: 1e0000001e0000001e0000001e0000001e0000001e0000001e0000001e0000001e0000001e0000001e0000001e000000
+  SeasonByMonth: 000000000000000000000000010000000100000001000000020000000200000002000000030000000300000003000000
 --- !u!33 &534569880206189121
 MeshFilter:
   m_ObjectHideFlags: 0

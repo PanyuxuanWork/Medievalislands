@@ -9,6 +9,10 @@
 // File       : ReservedPickupTask.cs
 // Description: 兑现“库存预留”，从仓库按预留量取走
 // ***************************************************************************/
+/***************************************************************************
+// File : ReservedPickupTask.cs  (升级版)
+// Desc: 兑现“库存预留”，失败时通知调度器进入冷却
+//***************************************************************************/
 
 public class ReservedPickupTask : TaskBase
 {
@@ -17,10 +21,19 @@ public class ReservedPickupTask : TaskBase
     private ResourceType _type;
     private int _amount;
 
-    public static ReservedPickupTask Create(ReservationManager rm, IStorage from, ResourceType type, int amount, int priority = 0)
+    // 新增（可选）：用于失败回调的调度器与键
+    private LogisticsRequestDispatcher _dispatcher;
+    private object _failKey; // 通常传 consumer（Pull）或 producer（Push）
+    private ResourceType _notifyType;
+
+    public static ReservedPickupTask Create(
+        ReservationManager rm, IStorage from, ResourceType type, int amount,
+        int priority = 0,
+        LogisticsRequestDispatcher dispatcher = null, object failKey = null, ResourceType notifyType = ResourceType.None)
     {
-        ReservedPickupTask t = new ReservedPickupTask();
+        var t = new ReservedPickupTask();
         t._rm = rm; t._from = from; t._type = type; t._amount = amount; t.Priority = priority;
+        t._dispatcher = dispatcher; t._failKey = failKey; t._notifyType = notifyType;
         return t;
     }
 
@@ -34,6 +47,8 @@ public class ReservedPickupTask : TaskBase
         if (!_rm.ConsumeReservedStock(_from, _type, _amount))
         {
             TLog.Warning("[ReservedPickupTask] 兑现库存预留失败。");
+            // 失败时通知调度器冷却
+            _dispatcher?.NotifyRequestFailed(_failKey);
             Fail(); return;
         }
 

@@ -6,6 +6,7 @@
 // Description: [TODO] Add script summary here
 // ***************************************************************************/
 
+using Core;
 using UnityEngine;
 
 public class GameBootstrap : MonoBehaviour

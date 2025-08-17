@@ -9,6 +9,7 @@
 // [TODO] Pathfinder.cs  (可临时挂在场景一个空物体上)
 using System;
 using System.Collections.Generic;
+using Core;
 using UnityEngine;
 
 public class Pathfinder : MonoBehaviour
