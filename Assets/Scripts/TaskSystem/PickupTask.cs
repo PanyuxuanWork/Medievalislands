@@ -60,7 +60,7 @@ public class PickupTask : TaskBase
     protected override void OnTick()
     {
         if (Status != TaskStatus.Running) return;
-        if (Ctx == null || Ctx.Actor == null || Ctx.Actor.Inventory == null || _from == null)
+        if (Ctx == null || Ctx.Owner == null || Ctx.Owner.Inventory == null || _from == null)
         {
             TLog.Warning("[PickupTask] 上下文非法。");
             Fail();
@@ -90,7 +90,7 @@ public class PickupTask : TaskBase
         {
             if (storage.TryPickup(_type, _requestAmount))
             {
-                Ctx.Actor.Inventory.Add(_type, _requestAmount);
+                Ctx.Owner.Inventory.Add(_type, _requestAmount);
                 TLog.Log("[PickupTask] IStorage 拿到：" + _type + " x" + _requestAmount, LogColor.Green);
                 Succeed();
                 return;
@@ -108,7 +108,7 @@ public class PickupTask : TaskBase
                 int have = storage.Get(_type);
                 if (have > 0 && storage.TryPickup(_type, have))
                 {
-                    Ctx.Actor.Inventory.Add(_type, have);
+                    Ctx.Owner.Inventory.Add(_type, have);
                     TLog.Log("[PickupTask] IStorage 不足，改为全部拿走：" + _type + " x" + have, LogColor.Yellow);
                     Succeed();
                     return;
@@ -133,7 +133,7 @@ public class PickupTask : TaskBase
         {
             if (producer.TryCollect(_type, _requestAmount))
             {
-                Ctx.Actor.Inventory.Add(_type, _requestAmount);
+                Ctx.Owner.Inventory.Add(_type, _requestAmount);
                 TLog.Log("[PickupTask] IProducer 拿到：" + _type + " x" + _requestAmount, LogColor.Green);
                 Succeed();
                 return;
@@ -151,7 +151,7 @@ public class PickupTask : TaskBase
                 {
                     if (producer.TryCollect(_type, take))
                     {
-                        Ctx.Actor.Inventory.Add(_type, take);
+                        Ctx.Owner.Inventory.Add(_type, take);
                         TLog.Log("[PickupTask] IProducer 不足，改为全部拿走（可得）：" + _type + " x" + take, LogColor.Yellow);
                         Succeed();
                         return;

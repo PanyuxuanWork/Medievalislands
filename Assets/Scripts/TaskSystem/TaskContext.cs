@@ -24,12 +24,12 @@ public interface ITask
 public class TaskContext
 {
     public CityContext City;
-    public Resident Actor;
+    public Resident Owner;
     public ResidentMover Mover;
 
-    public TaskContext(CityContext city, Resident actor, ResidentMover mover)
+    public TaskContext(CityContext city, Resident owner, ResidentMover mover)
     {
-        City = city; Actor = actor; Mover = mover;
+        City = city; Owner = owner; Mover = mover;
     }
 }
 

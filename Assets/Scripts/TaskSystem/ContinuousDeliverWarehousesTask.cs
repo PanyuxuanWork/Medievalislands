@@ -40,12 +40,12 @@ public class ContinuousDeliverWarehousesTask : TaskBase
 
     protected override void OnStart()
     {
-        if (Ctx == null || Ctx.Actor == null || Ctx.Mover == null || Ctx.Actor.Inventory == null)
+        if (Ctx == null || Ctx.Owner == null || Ctx.Mover == null || Ctx.Owner.Inventory == null)
         {
             TLog.Warning("[DeliverLoop] 上下文无效。");
             Fail(); return;
         }
-        if (Ctx.Actor.Inventory.Get(_type) <= 0)
+        if (Ctx.Owner.Inventory.Get(_type) <= 0)
         {
             TLog.Warning("[DeliverLoop] 背包为空，无需投递。");
             Fail(); return;
@@ -60,7 +60,7 @@ public class ContinuousDeliverWarehousesTask : TaskBase
 
         // 收集可接收的仓库（Get < Capacity），按距离排序
         _warehouses.Clear();
-        Vector3 pos = Ctx.Actor.transform.position;
+        Vector3 pos = Ctx.Owner.transform.position;
         List<WarehouseBuilding> list = _city.warehouses;
         List<(IStorage stor, float d2)> temp = new List<(IStorage, float)>();
 
@@ -98,7 +98,7 @@ public class ContinuousDeliverWarehousesTask : TaskBase
         _lastOpTime = -999f;
         _phase = Phase.SelectWarehouse;
 
-        TLog.Log("[DeliverLoop] 启动；资源=" + _type + "，初始携带=" + Ctx.Actor.Inventory.Get(_type) + "，候选仓库数=" + _warehouses.Count, LogColor.Cyan);
+        TLog.Log("[DeliverLoop] 启动；资源=" + _type + "，初始携带=" + Ctx.Owner.Inventory.Get(_type) + "，候选仓库数=" + _warehouses.Count, LogColor.Cyan);
     }
 
     protected override void OnTick()
@@ -106,7 +106,7 @@ public class ContinuousDeliverWarehousesTask : TaskBase
         if (Status != TaskStatus.Running) return;
 
         // 背包清空 → 成功
-        if (Ctx.Actor.Inventory.Get(_type) <= 0)
+        if (Ctx.Owner.Inventory.Get(_type) <= 0)
         {
             TLog.Log("[DeliverLoop] 背包清空，成功。", LogColor.Green);
             Succeed(); return;
@@ -115,7 +115,7 @@ public class ContinuousDeliverWarehousesTask : TaskBase
         // 超时
         if (Time.time - _startTime > _timeBudgetSec)
         {
-            TLog.Warning("[DeliverLoop] 超时，失败。剩余携带 " + Ctx.Actor.Inventory.Get(_type));
+            TLog.Warning("[DeliverLoop] 超时，失败。剩余携带 " + Ctx.Owner.Inventory.Get(_type));
             Fail(); return;
         }
 
@@ -148,7 +148,7 @@ public class ContinuousDeliverWarehousesTask : TaskBase
                 }
 
                 // 逐单位投：先从背包扣 1，再 Deliver(1)
-                if (!Ctx.Actor.Inventory.TryTake(_type, 1))
+                if (!Ctx.Owner.Inventory.TryTake(_type, 1))
                 {
                     // 背包可能刚好清空了
                     TLog.Log("[DeliverLoop] 尝试扣 1 失败，可能已清空。", LogColor.Grey, showInConsole: false);
@@ -156,7 +156,7 @@ public class ContinuousDeliverWarehousesTask : TaskBase
                 }
 
                 s.Deliver(_type, 1);
-                // TLog.Log("[DeliverLoop] 投 1 成功，背包剩=" + Ctx.Actor.Inventory.Get(_type), LogColor.Grey, showInConsole:false);
+                // TLog.Log("[DeliverLoop] 投 1 成功，背包剩=" + Ctx.Owner.Inventory.Get(_type), LogColor.Grey, showInConsole:false);
                 break;
         }
     }

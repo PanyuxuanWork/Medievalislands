@@ -32,7 +32,7 @@ public class DeliverTask : TaskBase
 
     protected override void OnTick()
     {
-        if (Ctx == null || Ctx.Actor == null || Ctx.Actor.Inventory == null || _to == null)
+        if (Ctx == null || Ctx.Owner == null || Ctx.Owner.Inventory == null || _to == null)
         {
             TLog.Warning("[DeliverTask] 上下文/目标为空。");
             Fail();
@@ -43,7 +43,7 @@ public class DeliverTask : TaskBase
         int deliverAmount = _amount;
         if (_policy == DeliverPolicy.DeliverCarried)
         {
-            int carried = Ctx.Actor.Inventory.Get(_type); // 你的 Inventory/Warehouse 已有 Get(type)
+            int carried = Ctx.Owner.Inventory.Get(_type); // 你的 Inventory/Warehouse 已有 Get(type)
             if (carried <= 0)
             {
                 TLog.Warning("[DeliverTask] 背包没有可投递资源：" + _type);
@@ -54,7 +54,7 @@ public class DeliverTask : TaskBase
         }
 
         // 先从背包扣（避免复制）
-        bool took = Ctx.Actor.Inventory.TryTake(_type, deliverAmount);
+        bool took = Ctx.Owner.Inventory.TryTake(_type, deliverAmount);
         if (!took)
         {
             TLog.Warning("[DeliverTask] 背包扣除失败，缺少 " + _type + " x" + deliverAmount);
@@ -69,7 +69,7 @@ public class DeliverTask : TaskBase
             if (!consumer.CanAccept(_type, deliverAmount) || !consumer.TryAccept(_type, deliverAmount))
             {
                 TLog.Warning("[DeliverTask] IConsumer 拒收： " + _type + " x" + deliverAmount + "，回滚背包");
-                Ctx.Actor.Inventory.Add(_type, deliverAmount);
+                Ctx.Owner.Inventory.Add(_type, deliverAmount);
                 Fail();
                 return;
             }
@@ -91,7 +91,7 @@ public class DeliverTask : TaskBase
 
         // 3) 既不是 IConsumer 也不是 IStorage → 回滚并失败
         TLog.Warning("[DeliverTask] 目标不实现 IConsumer/IStorage，回滚背包。");
-        Ctx.Actor.Inventory.Add(_type, deliverAmount);
+        Ctx.Owner.Inventory.Add(_type, deliverAmount);
         Fail();
     }
 }

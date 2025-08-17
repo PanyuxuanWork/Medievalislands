@@ -39,17 +39,17 @@ public class ReservedDeliverTask : TaskBase
 
     protected override void OnTick()
     {
-        if (Ctx == null || Ctx.Actor == null || Ctx.Actor.Inventory == null || _rm == null || _to == null)
+        if (Ctx == null || Ctx.Owner == null || Ctx.Owner.Inventory == null || _rm == null || _to == null)
         {
             TLog.Warning("[ReservedDeliverTask] 上下文无效。"); _dispatcher?.NotifyRequestFailed(_failKey); Fail(); return;
         }
 
-        int carried = Ctx.Actor.Inventory.Get(_type);
+        int carried = Ctx.Owner.Inventory.Get(_type);
         if (carried <= 0) { TLog.Warning("[ReservedDeliverTask] 背包无该资源。"); _dispatcher?.NotifyRequestFailed(_failKey); Fail(); return; }
 
         int deliver = _amount <= carried ? _amount : carried;
 
-        if (!Ctx.Actor.Inventory.TryTake(_type, deliver))
+        if (!Ctx.Owner.Inventory.TryTake(_type, deliver))
         {
             TLog.Warning("[ReservedDeliverTask] 背包扣除失败。"); _dispatcher?.NotifyRequestFailed(_failKey); Fail(); return;
         }
@@ -57,7 +57,7 @@ public class ReservedDeliverTask : TaskBase
         if (!_rm.ConsumeReservedSpace(_to, _type, deliver))
         {
             // 回滚
-            Ctx.Actor.Inventory.Add(_type, deliver);
+            Ctx.Owner.Inventory.Add(_type, deliver);
             TLog.Warning("[ReservedDeliverTask] 兑现空间预留失败。"); _dispatcher?.NotifyRequestFailed(_failKey); Fail(); return;
         }
 

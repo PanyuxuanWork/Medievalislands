@@ -42,7 +42,7 @@ public class ContinuousPickupWarehousesTask : TaskBase
 
     protected override void OnStart()
     {
-        if (Ctx == null || Ctx.Actor == null || Ctx.Mover == null)
+        if (Ctx == null || Ctx.Owner == null || Ctx.Mover == null)
         {
             TLog.Warning("[PickupLoop] 上下文无效。");
             Fail(); return;
@@ -56,7 +56,7 @@ public class ContinuousPickupWarehousesTask : TaskBase
 
         // 收集所有实现了 IStorage 的仓库，并按与 Resident 的距离排序（就近优先）
         _warehouses.Clear();
-        Vector3 pos = Ctx.Actor.transform.position;
+        Vector3 pos = Ctx.Owner.transform.position;
         List<WarehouseBuilding> list = _city.warehouses;
         List<(IStorage stor, float d2)> temp = new List<(IStorage, float)>();
 
@@ -86,12 +86,12 @@ public class ContinuousPickupWarehousesTask : TaskBase
         // 总超时
         if (Time.time - _startTime > _timeBudgetSec)
         {
-            TLog.Warning("[PickupLoop] 超时，失败。当前携带 " + Ctx.Actor.Inventory.Get(_type));
+            TLog.Warning("[PickupLoop] 超时，失败。当前携带 " + Ctx.Owner.Inventory.Get(_type));
             Fail(); return;
         }
 
         // 已达成携带目标
-        if (Ctx.Actor.Inventory.Get(_type) >= _carryGoal)
+        if (Ctx.Owner.Inventory.Get(_type) >= _carryGoal)
         {
             TLog.Log("[PickupLoop] 达成携带目标，成功。", LogColor.Green);
             Succeed(); return;
@@ -129,9 +129,9 @@ public class ContinuousPickupWarehousesTask : TaskBase
                 // 尝试取 1 单位
                 if (s.TryPickup(_type, 1))
                 {
-                    Ctx.Actor.Inventory.Add(_type, 1);
+                    Ctx.Owner.Inventory.Add(_type, 1);
                     // 达标即成功；否则继续
-                    // TLog.Log("[PickupLoop] 取 1 成功，现携带=" + Ctx.Actor.Inventory.Get(_type), LogColor.Grey, showInConsole:false);
+                    // TLog.Log("[PickupLoop] 取 1 成功，现携带=" + Ctx.Owner.Inventory.Get(_type), LogColor.Grey, showInConsole:false);
                 }
                 else
                 {

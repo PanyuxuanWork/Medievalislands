@@ -39,7 +39,7 @@ public class ReservedPickupTask : TaskBase
 
     protected override void OnTick()
     {
-        if (Ctx == null || Ctx.Actor == null || Ctx.Actor.Inventory == null || _rm == null || _from == null)
+        if (Ctx == null || Ctx.Owner == null || Ctx.Owner.Inventory == null || _rm == null || _from == null)
         {
             TLog.Warning("[ReservedPickupTask] 上下文无效。"); Fail(); return;
         }
@@ -52,7 +52,7 @@ public class ReservedPickupTask : TaskBase
             Fail(); return;
         }
 
-        Ctx.Actor.Inventory.Add(_type, _amount);
+        Ctx.Owner.Inventory.Add(_type, _amount);
         TLog.Log("[ReservedPickupTask] 取到预留 " + _type + " x" + _amount, LogColor.Green);
         Succeed();
     }
